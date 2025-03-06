@@ -14,6 +14,9 @@ from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtCore import Qt
 import PyQt6.QtNetwork
 
+sys.path.append('/home/darkapex/git')
+from debayer_gpu.qt import OpenGLImageWidget
+
 receivers = []
 
 # ctx-idx, width, height, strides[4], format[16], num-planes, plane[4]
@@ -102,10 +105,9 @@ class Receiver(QtWidgets.QWidget):
         self.gridLayout = QtWidgets.QGridLayout()
         self.setLayout(self.gridLayout)
 
-        self.labels = {}
+        self.widgets = {}
 
         self.show()
-        print('done')
 
     def on_ready_read(self):
         while self.socket.bytesAvailable():
@@ -153,21 +155,15 @@ class Receiver(QtWidgets.QWidget):
         if isinstance(fmt, MetaFormat):
             meta_to_pix(bytesperline, self.data_buffer)
         else:
-            if idx not in self.labels:
-                label = QtWidgets.QLabel()
-                label.setSizePolicy(QtWidgets.QSizePolicy.Policy.Ignored, QtWidgets.QSizePolicy.Policy.Ignored)
-                self.labels[idx] = label
-                self.gridLayout.addWidget(label, self.gridLayout.count() // 2, self.gridLayout.count() % 2)
+            if idx not in self.widgets:
+                widget = OpenGLImageWidget()
+                self.widgets[idx] = widget
+                self.gridLayout.addWidget(widget, self.gridLayout.count() // 2, self.gridLayout.count() % 2)
 
-            label = self.labels[idx]
+            widget = self.widgets[idx]
 
-            pix = buffer_to_pix(fmt, w, h, bytesperline, self.data_buffer)
-
-            # pylint: disable=no-member
-            pix = pix.scaled(label.width(), label.height(), Qt.AspectRatioMode.KeepAspectRatio,
-                             Qt.TransformationMode.FastTransformation)
-
-            label.setPixmap(pix)
+            widget.load_image_data(self.data_buffer, fmt, w, h)
+            widget.update()
 
         self.data_buffer = bytearray()
 
