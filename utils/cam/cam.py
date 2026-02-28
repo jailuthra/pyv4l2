@@ -26,7 +26,7 @@ def parse_args(ctx: Context):
     parser.add_argument('-S', '--script', help='User script')
     parser.add_argument('-D', '--delay', type=int, help='Delay in secs after the initial KMS modeset')
     parser.add_argument('-v', '--verbose', action='store_true', default=False, help='Verbose output')
-    parser.add_argument('-H', '--host', default='192.168.88.20', type=str)
+    parser.add_argument('-H', '--host', default='10.0.42.1', type=str)
     parser.add_argument('-P', '--port', default=43242, type=int)
     parser.add_argument('-n', '--numframes', default=0, type=int, help='Number of frames to capture')
     parser.add_argument('config_names', nargs='*', help='<config name>[:<stream name>[,<stream name>...]]')
