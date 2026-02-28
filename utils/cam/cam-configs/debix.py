@@ -1,21 +1,22 @@
 import v4l2
 
-sensor_fmt = (2592, 1940, v4l2.BusFormat.SRGGB12_1X12)
-isp_out_fmt = (2592, 1940, v4l2.BusFormat.YUYV8_2X8)
-resizer_out_fmt = (1920, 1080, v4l2.BusFormat.YUYV8_2X8)
-vid_fmt = (1920, 1080, v4l2.PixelFormats.YUYV)
+sensor_fmt = (1920, 1080, v4l2.BusFormat.SRGGB10_1X10)
+isp_out_fmt = (1920, 1080, v4l2.BusFormat.YUYV8_2X8)
+resizer_out_fmt = (1920, 1080, v4l2.BusFormat.YUYV8_1_5X8)
+vid_fmt = (1920, 1080, v4l2.PixelFormats.NV21)
 
-isp_crop = (0, 0, 2592, 1940)
-resizer_crop = (0, 0, 2592, 1940)
+isp_crop = (0, 0, 1920, 1080)
+resizer_crop = (0, 0, 1920, 1080)
 
 configurations = {}
 
 configurations['cam0'] = {
-    # TODO: add 'media' entry
+    'media': ('rkisp1', 'model'),
+
     'subdevs': [
         # Camera
         {
-            'entity': 'imx335 1-001a',
+            'entity': 'imx219 1-0010',
             'pads': [
                 { 'pad': (0, 0), 'fmt': sensor_fmt },
             ],
@@ -61,7 +62,7 @@ configurations['cam0'] = {
     ],
 
     'links': [
-        { 'src': ('imx335 1-001a', 0), 'dst': ('csis-32e40000.csi', 0) },
+        { 'src': ('imx219 1-0010', 0), 'dst': ('csis-32e40000.csi', 0) },
         { 'src': ('csis-32e40000.csi', 1), 'dst': ('rkisp1_isp', 0) },
         { 'src': ('rkisp1_isp', 2), 'dst': ('rkisp1_resizer_mainpath', 0) },
         { 'src': ('rkisp1_resizer_mainpath', 1), 'dst': ('rkisp1_mainpath', 0) },

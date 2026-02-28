@@ -1,18 +1,19 @@
 import v4l2
 from pixutils import formats
 
-imx219_w = 3280
-imx219_h = 2464
+imx219_w = 2592
+imx219_h = 1944
+#imx219_w = 1312
+#imx219_h = 972
 imx219_bus_fmt = v4l2.BusFormat.SRGGB8_1X8
 imx219_pix_fmt = v4l2.PixelFormats.SRGGB8
+imx219_bus_fmt = v4l2.BusFormat.SRGGB12_1X12
+imx219_pix_fmt = v4l2.PixelFormats.SRGGB12
 imx219_bus_fmt = v4l2.BusFormat.SRGGB10_1X10
 imx219_pix_fmt = v4l2.PixelFormats.SRGGB10
 
 mbus_fmt_imx219 = (imx219_w, imx219_h, imx219_bus_fmt)
 fmt_pix_imx219 = (imx219_w, imx219_h, imx219_pix_fmt)
-
-mbus_fmt_imx219_fe = (imx219_w, imx219_h, v4l2.BusFormat.SRGGB16_1X16)
-fmt_pix_imx219_fe = (imx219_w, imx219_h, v4l2.PixelFormats.SRGGB16)
 
 imx219_meta_w = imx219_w
 imx219_meta_h = 2
@@ -26,7 +27,8 @@ meta_fmt_pix_imx219 = (imx219_meta_w, imx219_meta_h, imx219_meta_pix_fmt)
 
 configurations = {}
 
-sensor_ent = 'imx219 4-0010'
+sensor_ent = 'imx335 4-001a'
+#sensor_ent = 'imx219 4-0010'
 
 configurations['cam0'] = {
     'media': ('TI-CSI2RX', 'model'),
@@ -42,9 +44,11 @@ configurations['cam0'] = {
 #               { "src": (1, 0), "dst": (0, 0) },
 #            ],
             'controls': [
-                (v4l2.uapi.V4L2_CID_EXPOSURE, 1759),
-                (v4l2.uapi.V4L2_CID_ANALOGUE_GAIN, 100),
-                (v4l2.uapi.V4L2_CID_DIGITAL_GAIN, 0),
+                (v4l2.uapi.V4L2_CID_EXPOSURE, 5300),
+                (v4l2.uapi.V4L2_CID_VBLANK, 2556),
+                (v4l2.uapi.V4L2_CID_ANALOGUE_GAIN, 40),
+                (v4l2.uapi.V4L2_CID_VFLIP, 0),
+                # (v4l2.uapi.V4L2_CID_DIGITAL_GAIN, 0),
             ],
         },
         # CSI-2 RX
@@ -127,4 +131,4 @@ configurations['cam0-new'] = {
 }
 
 def get_configs():
-    return (configurations, ['cam0-new'])
+    return (configurations, ['cam0'])

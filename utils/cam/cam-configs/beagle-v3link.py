@@ -1,11 +1,11 @@
 import v4l2
 
-imx219_w = 1640
-imx219_h = 1232
-#imx219_bus_fmt = v4l2.BusFormat.SRGGB10_1X10
-#imx219_pix_fmt = v4l2.PixelFormats.SRGGB10
+imx219_w = 640
+imx219_h = 480
 imx219_bus_fmt = v4l2.BusFormat.SRGGB8_1X8
 imx219_pix_fmt = v4l2.PixelFormats.SRGGB8
+imx219_bus_fmt = v4l2.BusFormat.SRGGB10_1X10
+imx219_pix_fmt = v4l2.PixelFormats.SRGGB10
 
 mbus_fmt_imx219 = (imx219_w, imx219_h, imx219_bus_fmt)
 fmt_pix_imx219 = (imx219_w, imx219_h, imx219_pix_fmt)
@@ -39,14 +39,15 @@ def gen_imx219_pixel(port):
 #                    { "pad": (1, 0), "fmt": mbus_fmt_imx219 },
                     { 'pad': (0, 0), 'fmt': mbus_fmt_imx219 },
                 ],
-                'controls': [
-                    (v4l2.uapi.V4L2_CID_EXPOSURE, 5300),
-                    (v4l2.uapi.V4L2_CID_ANALOGUE_GAIN, 200),
-                    # (v4l2.uapi.V4L2_CID_DIGITAL_GAIN, 0),
-                ],
 #                "routing": [
 #                   { "src": (1, 0), "dst": (0, 0) },
 #                ],
+
+                'controls': [
+                        (v4l2.uapi.V4L2_CID_ANALOGUE_GAIN, 200),
+                        (v4l2.uapi.V4L2_CID_VBLANK, 64000),
+                        (v4l2.uapi.V4L2_CID_EXPOSURE, 1700),
+                ]
             },
             # Serializer
             {
@@ -267,5 +268,5 @@ configurations['cam2-meta'] = gen_imx219_meta(2)
 configurations['cam3-meta'] = gen_imx219_meta(3)
 
 def get_configs():
-    #return (configurations, ['cam0', 'cam1', 'cam2', 'cam3'])
-    return (configurations, ['cam0', 'cam1'])
+    #return (configurations, ['cam0', 'cam1'])
+    return (configurations, ['cam0'])
